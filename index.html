@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+  <title>Advokat Vote</title>
+  <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Roboto:400,700'>
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="/jspm_packages/github/angular/bower-material@master/angular-material.css"/>
+  <link rel="stylesheet" href="/jspm_packages/npm/angular-material-time-picker@1.0.7/dist/md-time-picker.css"/>
+  <link rel="stylesheet" href="/assets/app.css"/>
+  <base href="/">
+</head>
+
+<body ng-cloak layout="column" ng-controller="AppController as app">
+
+  <!-- Container #1 (see wireframe) -->
+  <md-toolbar layout="row" class="md-toolbar-tools">
+    <md-button class="md-icon-button" aria-label="Show Menu" hide-gt-sm ng-click="app.toggleList()">
+      <md-icon>menu</md-icon>
+    </md-button>
+    <h2 flex md-truncate><a ui-sref="welcome">Advokat Vote</a></h2>
+    <img ng-show="app.AuthService.user && app.AuthService.user.thumbnail" ng-src="{{app.AuthService.user.thumbnail}}" alt="Account Avatar" class="md-avatar">
+
+    <md-menu md-position-mode="target-right target">
+      <md-button aria-label="Account Aptions" class="md-icon-button" ng-click="app.openAccountMenu($mdMenu, $event)">
+        <md-icon md-menu-origin>more_vert</md-icon>
+      </md-button>
+      <md-menu-content width="4">
+        <!-- icon="social:notifications-{{ctrl.notificationsEnabled ? 'off' : 'on'}}"" -->
+        <md-menu-item>
+          <md-button ng-click="app.AuthService.login($event)">
+            <md-icon md-menu-align-target>account_circle</md-icon>
+            Login
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="app.AuthService.logout($event)">
+            <md-icon>eject</md-icon>
+            Logout
+          </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+          <md-button ng-click="ctrl.about($event)">
+            <md-icon>help</md-icon>
+            About
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+  </md-toolbar>
+
+  <!-- Container #2 -->
+  <div flex layout="row">
+
+    <!-- Container #3 -->
+    <md-sidenav class="md-whiteframe-4dp" md-is-locked-open="$mdMedia('gt-sm')"
+                md-component-id="left" ng-click="app.toggleList()">
+      <section>
+        <md-subheader class="md-primary">Organising</md-subheader>
+        <md-list>
+          <md-list-item ui-sref="create">
+            <md-icon>create</md-icon>
+            <p>Create new Voting</p>
+          </md-list-item>
+        </md-list>
+      </section>
+      <md-divider></md-divider>
+      <section>
+        <md-subheader class="md-primary">Participating</md-subheader>
+        <!-- Custom VotingsList component -->
+        <md-list>
+          <md-list-item ng-repeat="voting in app.votings" ui-sref="show({votingId:voting._id})">
+            <md-icon>description</md-icon>
+            <p>{{voting.description.title}}</p>
+          </md-list-item>
+        </md-list>
+      </section>
+    </md-sidenav>
+    <!-- Container #4 -->
+    <md-content flex id="content" layout="row" layout-align="center" layout-padding="layout-padding">
+      <div flex="100" flex-gt-sm="66" ui-view></div>
+    </md-content>
+  </div>
+
+  <script src="https://unpkg.com/faye@1.2.4/client/faye-browser.js" type="text/javascript"></script>
+  <script src="/jspm_packages/system.js" type="text/javascript"></script>
+  <script src="/config.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    System
+        .import('src/boot/boot')
+        .catch( console.error.bind(console) ); // make sure any errors print to console
+  </script>
+
+</body>
+</html>
